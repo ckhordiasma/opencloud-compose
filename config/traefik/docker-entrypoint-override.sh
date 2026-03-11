@@ -40,6 +40,7 @@ if [ "${TRAEFIK_SERVICES_TLS_CONFIG}" = "tls.certresolver=letsencrypt" ]; then
     add_arg "--certificatesResolvers.letsencrypt.acme.caserver=${TRAEFIK_ACME_CASERVER:-https://acme-v02.api.letsencrypt.org/directory}"
     # change to dns challenge
     add_arg "--certificatesResolvers.letsencrypt.acme.dnsChallenge=true"
+    add_arg "--certificatesResolvers.letsencrypt.acme.dnsChallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
     add_arg "--certificatesResolvers.letsencrypt.acme.dnsChallenge.provider=cloudflare"
 fi
 
