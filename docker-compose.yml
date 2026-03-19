@@ -1,5 +1,16 @@
 ---
 services:
+  nats-cli:
+    image: natsio/nats-box:latest
+    container_name: nats-cli
+    networks:
+      - opencloud-net
+    entrypoint: /bin/sh
+    stdin_open: true
+    tty: true
+    command: ["-c", "while true; do sleep 30; done"]
+    depends_on:
+      - opencloud
   opencloud:
     # renovate: depName=opencloudeu/opencloud-rolling
     image: ${OC_DOCKER_IMAGE:-opencloudeu/opencloud-rolling}:${OC_DOCKER_TAG:-5.2.0}
@@ -56,6 +67,9 @@ services:
       OC_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS: "${OC_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS:-1}"
       # default language for services/WebUI; defaults to English, language code (ISO 639-1, e.g. de, en, fr)
       OC_DEFAULT_LANGUAGE: ${DEFAULT_LANGUAGE}
+      AUTOMEMLIMIT: "off"
+      GOMEMLIMIT: "4GiB"
+      GOGC: "50"
     volumes:
       - ./config/opencloud/csp.yaml:/etc/opencloud/csp.yaml
       - ./config/opencloud/banned-password-list.txt:/etc/opencloud/banned-password-list.txt
